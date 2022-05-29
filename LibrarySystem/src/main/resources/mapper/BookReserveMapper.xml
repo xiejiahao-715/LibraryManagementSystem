@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjh.library.common.mapper.BookReserveMapper">
+
+    <resultMap id="ReserveBookInfoVo" type="com.xjh.library.module.user.entity.ReserveBookInfoVo">
+        <id column="id" property="id"/>
+        <result column="bookId" property="bookId"/>
+        <result column="bookName" property="bookName"/>
+        <result column="reserveTime" property="reserveTime"/>
+        <result column="notifyTime" property="notifyTime"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <select id="getPageReserveBookInfo" resultMap="ReserveBookInfoVo">
+        select
+            reserve.id as id,
+            reserve.book_id as bookId,
+            info.name as bookName,
+            reserve.reserve_time as reserveTime,
+            reserve.notify_time as notifyTime,
+            reserve.status as status
+        from book_reserve reserve
+            left join book_info info on reserve.book_id = info.id
+        where reserve.deleted = 0
+        <if test="ew != null and ew.sqlSegment != null and ew.sqlSegment.trim() != ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+
+
+    <resultMap id="ReserveNotifyInfo" type="com.xjh.library.module.admin.entity.notify.ReserveNotifyInfo">
+        <id column="reserveId" property="reserveId"/>
+        <result column="userId" property="userId"/>
+        <result column="reserveTime" property="reserveTime"/>
+        <result column="bookName" property="bookName"/>
+        <result column="isbn" property="isbn"/>
+    </resultMap>
+    <select id="getReserveNotifyInfo" resultMap="ReserveNotifyInfo">
+        select
+            reserve.id as reserveId,
+            reserve.user_id as userId,
+            reserve.reserve_time as reserveTime,
+            info.name as bookName,
+            info.ISBN as isbn
+        from book_reserve reserve
+            left join book_stock stock on stock.book_id = reserve.book_id
+            left join book_info info on reserve.book_id = info.id
+        where reserve.deleted = 0 and reserve.status = 0 and stock.num > 0
+    </select>
+</mapper>

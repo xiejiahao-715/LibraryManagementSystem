@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjh.library.common.mapper.BookBorrowMapper">
+
+    <resultMap id="BorrowBookInfoVo" type="com.xjh.library.module.user.entity.BorrowBookInfoVo">
+        <id column="id" property="id"/>
+        <result column="bookId" property="bookId"/>
+        <result column="bookName" property="bookName"/>
+        <result column="borrowBookDate" property="borrowBookDate"/>
+        <result column="returnBookDate" property="returnBookDate"/>
+        <result column="borrowTime" property="borrowTime"/>
+        <result column="endDate" property="endDate"/>
+        <result column="status" property="status"/>
+    </resultMap>
+    <select id="getPageBorrowBookInfo" resultType="com.xjh.library.module.user.entity.BorrowBookInfoVo">
+        select
+            borrow.id as id,
+            borrow.book_id as bookId,
+            info.name as bookName,
+            borrow.borrow_book_date as borrowBookDate,
+            borrow.return_book_date as returnBookDate,
+            borrow.borrow_time as borrowTime,
+            borrow.end_date as endDate,
+            borrow.status as status
+        from book_borrow borrow
+            left join book_info info on borrow.book_id = info.id
+        where borrow.deleted = 0
+        <if test="ew != null and ew.sqlSegment != null and ew.sqlSegment.trim() != ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+
+    <resultMap id="BorrowTimeoutNotifyInfo" type="com.xjh.library.module.admin.entity.notify.BorrowTimeoutNotifyInfo">
+        <id column="borrowId" property="borrowId"/>
+        <result column="userId" property="userId"/>
+        <result column="borrowBookDate" property="borrowBookDate"/>
+        <result column="bookName" property="bookName"/>
+        <result column="isbn" property="isbn"/>
+    </resultMap>
+    <select id="getBorrowTimeoutNotifyInfo" resultMap="BorrowTimeoutNotifyInfo">
+        select
+            borrow.id as borrowId,
+            borrow.user_id as userId,
+            borrow.borrow_book_date as borrowBookDate,
+            info.name as bookName,
+            info.ISBN as isbn
+        from book_borrow borrow
+            left join book_info info on borrow.book_id = info.id
+        where borrow.deleted = 0 and (borrow.status = 0 or borrow.status = 1)
+          and borrow.return_book_date <![CDATA[ <= ]]> NOW()
+    </select>
+
+    <resultMap id="BorrowBookDetailVo" type="com.xjh.library.module.admin.entity.BorrowBookDetailVo">
+        <id column="id" property="id"/>
+        <result column="bookId" property="bookId"/>
+        <result column="bookName" property="bookName"/>
+        <result column="userId" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="borrowBookDate" property="borrowBookDate"/>
+        <result column="returnBookDate" property="returnBookDate"/>
+        <result column="borrowTime" property="borrowTime"/>
+        <result column="endDate" property="endDate"/>
+        <result column="status" property="status"/>
+    </resultMap>
+    <select id="getPageBorrowBookDetail" resultMap="BorrowBookDetailVo">
+        select
+            borrow.id as id,
+            borrow.book_id as bookId,
+            info.name as bookName,
+            borrow.user_id as userId,
+            user.username as username,
+            borrow.borrow_book_date as borrowBookDate,
+            borrow.return_book_date as returnBookDate,
+            borrow.borrow_time as borrowTime,
+            borrow.end_date as endDate,
+            borrow.status as status
+        from book_borrow borrow
+            left join book_info info on borrow.book_id = info.id
+            left join sys_user user on borrow.user_id = user.id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

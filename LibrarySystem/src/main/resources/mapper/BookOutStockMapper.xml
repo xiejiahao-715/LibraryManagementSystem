@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjh.library.common.mapper.BookOutStockMapper">
+
+    <resultMap id="BookOutStockInfoVo" type="com.xjh.library.module.admin.entity.BookOutStockInfoVo">
+        <id column="id" property="id"/>
+        <result column="bookId" property="bookId"/>
+        <result column="bookName" property="bookName"/>
+        <result column="isbn" property="isbn"/>
+        <result column="userId" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="outStockTime" property="outStockTime"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <select id="getPageBookOutStockInfo" resultMap="BookOutStockInfoVo">
+        select
+            out_stock.id as id,
+            out_stock.book_id as bookId,
+            info.name as bookName,
+            info.ISBN as isbn,
+            out_stock.user_id as userId,
+            user.username as username,
+            out_stock.out_stock_time as outStockTime,
+            out_stock.num as num
+        from book_out_stock out_stock
+            left join book_info info on out_stock.book_id = info.id
+            left join sys_user user on out_stock.user_id = user.id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

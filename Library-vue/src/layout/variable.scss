@@ -1,0 +1,31 @@
+// 布局的css样式相关变量
+
+// Header部分
+// 顶部的高度
+$headerHeight: 70px;
+
+// Sidebar部分
+// 侧边栏折叠时的宽度
+$sidebarCollapseWidth: 64px;
+// 侧边栏展开时的宽度
+$sidebarExpandWidth: 210px;
+// 侧边菜单栏的背景颜色
+$sidebarMenuBg: #304156;
+// 侧边菜单栏的文本颜色
+$sidebarMenuTextColor: #bfcbd9;
+// 侧边菜单栏的激活菜单的文本颜色
+$sidebarMenuActiveTextColor: #409EFF;
+
+
+// Tags部分
+// 标签栏的高度
+$tagDivHeight: 35px;
+// 每一个标签的高度
+$tagHeight: 21px;
+
+
+:export{
+  menuText: $sidebarMenuTextColor;
+  menuBg: $sidebarMenuBg;
+  menuActiveText: $sidebarMenuActiveTextColor;
+}
