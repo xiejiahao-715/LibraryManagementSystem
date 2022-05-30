@@ -32,7 +32,7 @@ public class AuthorizeAspect {
             // 如果方法上未找到注解信息，则去类上寻找
             authorize = AopUtil.getClassAnnotation(joinPoint,Authorize.class);
         }
-        // 方法和类上都没有，没有限制授权信息，直接放行
+        // 方法和类上都没有，没有限制授权信息，直接放行,否者进行权限验证
         if(authorize != null){
             List<String> authorization = Arrays.asList(authorize.value());
             if(authorization.size() == 0){

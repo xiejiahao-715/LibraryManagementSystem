@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xjh.library.common.entity.SysUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xjh.library.module.admin.entity.BorrowerInfoVo;
+import com.xjh.library.module.superadmin.entity.AdminInfoVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,6 +22,13 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return 返回分页信息
      */
     IPage<BorrowerInfoVo> getPageBorrowerInfo(Page<BorrowerInfoVo> page);
+
+    /**
+     * 获取管理员的分页信息
+     * @param page 分页对象
+     * @return 返回分页信息
+     */
+    IPage<AdminInfoVo> getPageAdminInfo(Page<BorrowerInfoVo> page);
 }
 
 

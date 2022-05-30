@@ -89,8 +89,8 @@ export default {
     align-items: center;
     // 标签消息的动画
     .tag-item{
+      white-space:nowrap;
       width: auto;
-      flex-grow: 0;
       margin: 3px 5px 2px 3px;
       border-radius: 3px;
       font-size: 12px;

@@ -33,4 +33,22 @@
             left join user_resource resource on user.id = resource.user_id
         where user.deleted = 0 and user_role.role_id = 2
     </select>
+
+    <resultMap id="AdminInfoVo" type="com.xjh.library.module.superadmin.entity.AdminInfoVo">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="email" property="email"/>
+        <result column="status" property="status"/>
+
+    </resultMap>
+    <select id="getPageAdminInfo" resultMap="AdminInfoVo">
+        select
+            user.id as id,
+            user.username as username,
+            user.email as email,
+            user.status as status
+        from sys_user user
+            left join sys_user_role_relation user_role on user.id = user_role.user_id
+        where  user.deleted = 0 and user_role.role_id = 1
+    </select>
 </mapper>

@@ -228,6 +228,25 @@ export const asyncRouter = [
         }
       }
     ]
+  },
+    // 超级管理员
+  {
+    path: '/ManageAdmin',
+    component: Layout,
+    meta:{
+      roles: ['super_admin']
+    },
+    children: [
+      {
+        path: '',
+        name: 'ManageAdmin',
+        component: ()=>import('@/views/superadmin/ManageAdmin'),
+        meta:{
+          title: '所有管理员',
+          icon: 'el-icon-xjh-manageAdmin'
+        }
+      }
+    ]
   }
 ]
 

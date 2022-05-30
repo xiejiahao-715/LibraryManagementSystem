@@ -32,7 +32,7 @@ router.beforeEach(async (to,from,next)=>{
         }catch (error){
           //TODO 获取用户信息失败则重置用户信息
           UserInfoStore.resetUserInfo()
-          next(`/login?redirect=${to.path}`)
+          next({path: `/login?redirect=${to.path}`})
           NProgress.done()
         }
       }
@@ -44,7 +44,9 @@ router.beforeEach(async (to,from,next)=>{
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`)
+      const UserInfoStore = useUserInfoStore()
+      UserInfoStore.resetUserInfo()
+      next({path: `/login?redirect=${to.path}`})
       NProgress.done()
     }
   }

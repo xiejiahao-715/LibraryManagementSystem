@@ -171,6 +171,17 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void reserveBook(Long bookId) {
+        Long uid = UserDetailContextHolder.getUserId();
+
+        // 判断用户是否已经借阅了同一本书还没有归还
+        LambdaQueryWrapper<BookBorrow> borrowWrapper = new LambdaQueryWrapper<>();
+        borrowWrapper.eq(BookBorrow::getBookId,bookId);
+        borrowWrapper.eq(BookBorrow::getUserId,uid);
+        borrowWrapper.ne(BookBorrow::getStatus,BookBorrowStatus.FINISH.getStatusCode());
+        if(bookBorrowService.count(borrowWrapper) != 0){
+            throw new MyException("已经借阅了该图书无法预约");
+        }
+
         // 判断图书是否已经没有了库存
         BookStock bookStock = bookStockService.getBookStockById(bookId);
         if(bookStock == null){
@@ -180,7 +191,6 @@ public class BookServiceImpl implements BookService {
             throw new MyException("图书还有库存，请去借阅");
         }
 
-        Long uid = UserDetailContextHolder.getUserId();
 
         // 判断用户是否已经预约了同一本书
         LambdaQueryWrapper<BookReserve> reserveWrapper = new LambdaQueryWrapper<>();

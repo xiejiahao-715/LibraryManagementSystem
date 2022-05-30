@@ -107,7 +107,7 @@ public class LoginServiceImpl implements LoginService {
         // 获取用户的角色名称
         List<String> roles = sysUserMapper.getUserRoles(id);
         userDetail = new UserDetail();
-        //TODO 这里的权限管理暂且使用用户角色来代替，权限表的设置还没有完成
+        //TODO 这里的权限管理暂且使用用户角色来代替，权限表还没有加入
         userDetail.setPermissions(roles);
         BeanUtils.copyProperties(user,userDetail);
         // 将用户详细信息存入redis
