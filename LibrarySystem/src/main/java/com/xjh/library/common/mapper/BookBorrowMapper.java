@@ -30,7 +30,7 @@ public interface BookBorrowMapper extends BaseMapper<BookBorrow> {
     List<BorrowTimeoutNotifyInfo> getBorrowTimeoutNotifyInfo();
 
     /**
-     * 管理 自定义分页查询 得到图书借阅的详细信息
+     * 管理员 自定义分页查询 得到图书借阅的详细信息
      * @param wrapper 查询条件 对象的名称需要以 borrow. 开头，例如 wrapper.eq("borrow.id",2222)
      * @return 返回自定义分页对象
      */

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xjh.library.common.entity.BookReserve;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xjh.library.module.admin.entity.ReserveBookDetailVo;
 import com.xjh.library.module.admin.entity.notify.ReserveNotifyInfo;
 import com.xjh.library.module.user.entity.BookInfoVo;
 import com.xjh.library.module.user.entity.ReserveBookInfoVo;
@@ -18,7 +19,7 @@ import java.util.List;
 public interface BookReserveMapper extends BaseMapper<BookReserve> {
 
     /**
-     * 分页查询用户的预约信息
+     * 借阅者 自定义 分页查询用户的预约信息
      * @param page 分页对象
      * @param wrapper 查询条件 对象的名称需要以 reserve. 开头，例如 wrapper.eq("reserve.id",2222)
      * @return 返回一页预约信息
@@ -31,6 +32,13 @@ public interface BookReserveMapper extends BaseMapper<BookReserve> {
      * @return 待通知的预约信息列表
      */
     List<ReserveNotifyInfo> getReserveNotifyInfo();
+
+    /**
+     * 管理员 自定义分页查询 得到图书预约的详细信息
+     * @param wrapper 查询条件 对象的名称需要以 reserve. 开头，例如 wrapper.eq("reserve.id",2222)
+     * @return 返回自定义分页对象
+     */
+    IPage<ReserveBookDetailVo> getPageReserveBookDetail(Page<ReserveBookDetailVo> page,@Param(Constants.WRAPPER) QueryWrapper<ReserveBookDetailVo> wrapper);
 }
 
 

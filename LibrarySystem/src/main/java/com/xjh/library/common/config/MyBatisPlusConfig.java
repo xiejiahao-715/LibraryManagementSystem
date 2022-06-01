@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@MapperScan("com.xjh.library.common.mapper")
+@MapperScan({"com.xjh.library.common.mapper","com.xjh.library.module.superadmin.mapper"})
 @EnableTransactionManagement
 public class MyBatisPlusConfig {
     // 配置MyBatisPlus的插件

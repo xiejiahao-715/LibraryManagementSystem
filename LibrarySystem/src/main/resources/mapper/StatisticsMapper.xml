@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjh.library.module.superadmin.mapper.StatisticsMapper">
+
+    <resultMap id="DailyBookBorrowNum" type="com.xjh.library.module.superadmin.entity.statistics.DailyBookBorrowNum">
+        <id column="date" property="date"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <select id="getDailyBookBorrowNum" resultMap="DailyBookBorrowNum">
+        <!-- 动态创建需要查询的对应的日期-->
+        with recursive date_list(date,rowNumber) as (
+            select
+                   <choose>
+                        <when test="offsetDay == null or offsetDay >= 0 ">
+                            #{date}
+                        </when>
+                        <otherwise>
+                            date_add(#{date},interval #{offsetDay} day)
+                        </otherwise>
+                   </choose>,
+                   @rowNumber := 1
+            <!-- 当offsetDay为null或者0的时候，不需要统计任何数据 -->
+            <if test="offsetDay == null or offsetDay == 0">
+                where false
+            </if>
+            union all
+            select date_add(date,interval 1 day),
+                   @rowNumber := @rowNumber + 1
+            from date_list
+            <where>
+                <!-- 当递归到指定的便宜日期数量后停止 -->
+                @rowNumber <![CDATA[<]]>
+                <choose>
+                    <when test="offsetDay == null">0</when>
+                    <when test="offsetDay >= 0">#{offsetDay}</when>
+                    <otherwise>abs(#{offsetDay})</otherwise>
+                </choose>
+            </where>
+        )
+        <!-- 将动态日期表左连接数据库的实际数据-->
+        select date_list.date           as date,
+               ifnull(data.borrowNum,0) as num
+        from date_list
+            left join (
+                select DATE_FORMAT(borrow_book_date, '%Y-%m-%d') as date,
+                       count(*)                                  as borrowNum
+                from book_borrow
+                <where>
+                    <choose>
+                        <when test="offsetDay == null or offsetDay == 0">
+                            <!-- 偏移量为0代表不需要查询任何数据 -->
+                            false
+                        </when>
+                        <when test="offsetDay > 0">
+                            borrow_book_date between #{date} and date_add(#{date},interval #{offsetDay} day)
+                        </when>
+                        <otherwise>
+                            borrow_book_date between date_add(#{date},interval #{offsetDay} day) and #{date}
+                        </otherwise>
+                    </choose>
+                </where>
+                group by date
+            ) data on date_list.date = data.date
+    </select>
+
+    <resultMap id="BookNumOfType" type="com.xjh.library.module.superadmin.entity.statistics.BookNumOfType">
+        <id column="typeId" property="typeId"/>
+        <result column="typeName" property="typeName"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <select id="getBookNumOfType" resultMap="BookNumOfType">
+        select type_id      as typeId,
+               type.name    as typeName,
+               count(*)     as num
+        from book_type type
+                 left join book_info info on type.id = info.type_id
+        where type.deleted = 0 and info.deleted = 0
+        group by type.id
+    </select>
+</mapper>

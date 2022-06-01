@@ -1,29 +1,37 @@
 package com.xjh.library;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xjh.library.common.mapper.BookInfoMapper;
-import com.xjh.library.module.user.entity.BookInfoVo;
+import com.xjh.library.module.admin.task.NotifyTask;
+import com.xjh.library.module.superadmin.entity.statistics.DailyBookBorrowNum;
+import com.xjh.library.module.superadmin.mapper.StatisticsMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = LibraryApplication.class)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
+        classes = LibraryApplication.class)
 public class TestMyBatisPlus {
 
-    @Autowired
-    private BookInfoMapper bookInfoMapper;
+    // 排除定时任务这个bean
+    @MockBean
+    private NotifyTask notifyTask;
 
+    @Autowired
+    private StatisticsMapper statisticsMapper;
+
+    // 测试超级管理员的数据统计接口层
     @Test
-    public void testGetPageBookInfo(){
-        QueryWrapper<BookInfoVo> wrapper = new QueryWrapper<>();
-        wrapper.eq("info.id",1526755258158645250L);
-        IPage<BookInfoVo> bookInfoPage = bookInfoMapper.getPageBookInfo(new Page<>(1,10),wrapper);
-        System.out.println(bookInfoPage.getRecords());
+    public void testStatisticsMapper(){
+        LocalDate date = LocalDate.of(2022,5,1);
+        List<DailyBookBorrowNum> list = statisticsMapper.getDailyBookBorrowNum(date,-31);
+        list.forEach(System.out::println);
     }
 
 }

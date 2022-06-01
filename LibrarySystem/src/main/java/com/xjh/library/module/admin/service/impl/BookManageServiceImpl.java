@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xjh.library.common.constants.BookBorrowStatus;
+import com.xjh.library.common.constants.BookReserveStatus;
 import com.xjh.library.common.entity.BookInfo;
 import com.xjh.library.common.entity.BookOutStock;
 import com.xjh.library.common.entity.BookStock;
 import com.xjh.library.common.exception.MyException;
 import com.xjh.library.common.mapper.BookBorrowMapper;
 import com.xjh.library.common.mapper.BookOutStockMapper;
+import com.xjh.library.common.mapper.BookReserveMapper;
 import com.xjh.library.common.service.BookInfoService;
 import com.xjh.library.common.service.BookOutStockService;
 import com.xjh.library.common.service.BookStockService;
@@ -20,6 +22,7 @@ import com.xjh.library.common.utils.FileUtil;
 import com.xjh.library.module.admin.entity.BookOutStockInfoVo;
 import com.xjh.library.module.admin.entity.BorrowBookDetailVo;
 import com.xjh.library.module.admin.entity.EditBookFormVo;
+import com.xjh.library.module.admin.entity.ReserveBookDetailVo;
 import com.xjh.library.module.admin.entity.excel.BookExcelData;
 import com.xjh.library.module.admin.listener.BookExcelDataListener;
 import com.xjh.library.module.admin.service.BookManageService;
@@ -30,7 +33,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.concurrent.locks.Lock;
@@ -61,6 +63,9 @@ public class BookManageServiceImpl implements BookManageService {
 
     @Autowired
     private BookBorrowMapper bookBorrowMapper;
+
+    @Autowired
+    private BookReserveMapper bookReserveMapper;
 
 
     @Override
@@ -206,6 +211,7 @@ public class BookManageServiceImpl implements BookManageService {
         QueryWrapper<BookOutStockInfoVo> wrapper = new QueryWrapper<>();
         // 选择逻辑未删除的数据
         wrapper.eq("out_stock.deleted",0);
+        wrapper.orderByDesc("out_stock.out_stock_time");
         return bookOutStockMapper.getPageBookOutStockInfo(new Page<>(current,limit),wrapper);
     }
 
@@ -223,6 +229,26 @@ public class BookManageServiceImpl implements BookManageService {
             for(BookBorrowStatus status : BookBorrowStatus.values()){
                 if(status.getStatusCode().equals(borrowBookDetailVo.getStatus())){
                     borrowBookDetailVo.setDescription(status.getMessage());
+                    break;
+                }
+            }
+        });
+        return page;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public IPage<ReserveBookDetailVo> getPageReserveBookDetail(long current, long limit) {
+        QueryWrapper<ReserveBookDetailVo> wrapper = new QueryWrapper<>();
+        // 按预约的时间倒序
+        wrapper.orderByDesc("reserve.reserve_time");
+        wrapper.eq("reserve.deleted",0);
+        IPage<ReserveBookDetailVo> page = bookReserveMapper.getPageReserveBookDetail(new Page<>(current,limit),wrapper);
+        // 添加状态描述信息
+        page.getRecords().forEach(reserveBookDetailVo -> {
+            for(BookReserveStatus status : BookReserveStatus.values()){
+                if(status.getStatusCode().equals(reserveBookDetailVo.getStatus())){
+                    reserveBookDetailVo.setDescription(status.getMessage());
                     break;
                 }
             }

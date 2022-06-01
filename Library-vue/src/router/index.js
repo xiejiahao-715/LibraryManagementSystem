@@ -229,6 +229,24 @@ export const asyncRouter = [
       }
     ]
   },
+  {
+    path: '/ManageBookReserve',
+    component: Layout,
+    meta:{
+      roles: ['admin'],
+    },
+    children: [
+      {
+        path: '',
+        name: 'ManageBookReserve',
+        component: ()=>import('@/views/admin/ManageBookReserve'),
+        meta:{
+          title: '图书预约管理',
+          icon: 'el-icon-xjh-reserve'
+        }
+      }
+    ]
+  },
     // 超级管理员
   {
     path: '/ManageAdmin',
@@ -244,6 +262,24 @@ export const asyncRouter = [
         meta:{
           title: '所有管理员',
           icon: 'el-icon-xjh-manageAdmin'
+        }
+      }
+    ]
+  },
+  {
+    path: '/statistics',
+    component: Layout,
+    meta:{
+      roles: ['super_admin']
+    },
+    children: [
+      {
+        path: '',
+        name: 'Statistics',
+        component: ()=>import('@/views/superadmin/Statistics'),
+        meta:{
+          title: '数据统计',
+          icon: 'el-icon-xjh-statistics'
         }
       }
     ]

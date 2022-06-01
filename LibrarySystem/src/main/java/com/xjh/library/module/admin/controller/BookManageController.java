@@ -7,6 +7,7 @@ import com.xjh.library.common.utils.PageUtil;
 import com.xjh.library.module.admin.entity.BookOutStockInfoVo;
 import com.xjh.library.module.admin.entity.BorrowBookDetailVo;
 import com.xjh.library.module.admin.entity.EditBookFormVo;
+import com.xjh.library.module.admin.entity.ReserveBookDetailVo;
 import com.xjh.library.module.admin.service.BookManageService;
 import com.xjh.library.module.admin.service.MessageService;
 import com.xjh.library.module.admin.validator.AddGroup;
@@ -105,5 +106,15 @@ public class BookManageController {
             @PathVariable("borrowId") Long borrowId){
         messageService.recallBookReturnNotify(borrowId);
         return CommonResult.success().message("催还通知已发出");
+    }
+
+    @ApiOperation("分页查询所有的预约信息")
+    @GetMapping("/bookReserveDetail/{current}/{limit}")
+    @Authorize(SysRoleConstants.ADMIN)
+    public CommonResult getPageReserveBookDetail(
+            @PathVariable("current") Long current,
+            @PathVariable("limit") Long limit){
+        IPage<ReserveBookDetailVo> page = bookManageService.getPageReserveBookDetail(current,limit);
+        return CommonResult.success().message("获取所有的预约信息").data(PageUtil.toMap(page));
     }
 }

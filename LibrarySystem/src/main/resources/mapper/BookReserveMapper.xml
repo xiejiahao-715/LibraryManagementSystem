@@ -49,4 +49,33 @@
             left join book_info info on reserve.book_id = info.id
         where reserve.deleted = 0 and reserve.status = 0 and stock.num > 0
     </select>
+
+    <resultMap id="ReserveBookDetailVo" type="com.xjh.library.module.admin.entity.ReserveBookDetailVo">
+        <id column="id" property="id"/>
+        <result column="userId" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="bookId" property="bookId"/>
+        <result column="bookName" property="bookName"/>
+        <result column="reserveTime" property="reserveTime"/>
+        <result column="notifyTime" property="notifyTime"/>
+        <result column="status" property="status"/>
+        <result column="stockNum" property="stockNum"/>
+    </resultMap>
+    <select id="getPageReserveBookDetail" resultMap="ReserveBookDetailVo">
+        select
+            reserve.id as id,
+            reserve.user_id as userId,
+            user.username as username,
+            reserve.book_id as bookId,
+            info.name as bookName,
+            reserve.reserve_time as reserveTime,
+            reserve.notify_time as notifyTime,
+            reserve.status as status,
+            stock.num as stockNum
+        from book_reserve reserve
+            left join book_info info on info.id = reserve.book_id
+            left join sys_user user on user.id = reserve.user_id
+            left join book_stock stock on reserve.book_id = stock.book_id
+        ${ew.customSqlSegment}
+    </select>
 </mapper>

@@ -88,6 +88,14 @@ export function getPageBorrowBookDetailApi(current,limit){
   })
 }
 
+// 分页查询所有的预约信息
+export function getPageReserveBookDetailApi(current,limit){
+  return request({
+    url: `/admin/bookManage/bookReserveDetail/${current}/${limit}`,
+    method: 'get'
+  })
+}
+
 // 催还图书通知
 export function recallBookReturnNotifyApi(borrowId){
   return request({

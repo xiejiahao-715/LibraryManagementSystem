@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xjh.library.module.admin.entity.BookOutStockInfoVo;
 import com.xjh.library.module.admin.entity.BorrowBookDetailVo;
 import com.xjh.library.module.admin.entity.EditBookFormVo;
+import com.xjh.library.module.admin.entity.ReserveBookDetailVo;
 import org.springframework.web.multipart.MultipartFile;
 
 // 图书管理员：管理图书信息的操作
@@ -56,4 +57,12 @@ public interface  BookManageService {
      * @return 返回分页信息
      */
     IPage<BorrowBookDetailVo> getPageBorrowBookDetail(long current,long limit);
+
+    /**
+     * 分页查询获取图书的预约记录
+     * @param current 当前页
+     * @param limit 每页数量
+     * @return 返回分页信息
+     */
+    IPage<ReserveBookDetailVo> getPageReserveBookDetail(long current,long limit);
 }

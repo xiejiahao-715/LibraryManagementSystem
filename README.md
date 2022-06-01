@@ -8,6 +8,10 @@
 
 ## 数据库设计
 
+> **ER图如下**
+
+<div><img src="./document/picture/数据库ER图.jpg" alt="数据库ER图" /></div>
+
 > **PDM图如下**
 
 <div><img src="./document/picture/数据库PDM图.jpg" alt="数据库PDM图" /></div>
@@ -88,8 +92,12 @@
 
 <div><img src="./document/picture/图书借阅管理.jpg" alt="图书借阅管理" /></div>
 
+<div><img src="./document/picture/图书出库记录.jpg" alt="图书出库记录" /></div>
+
 ### 系统管理员
 
 <div><img src="./document/picture/系统管理员首页.jpg" alt="系统管理员首页" ></div>
 
 <div><img src="./document/picture/添加管理员.jpg" alt="添加管理员" /></div>
+
+<div><img src="./document/picture/数据统计.jpg" alt="数据统计" ></div>

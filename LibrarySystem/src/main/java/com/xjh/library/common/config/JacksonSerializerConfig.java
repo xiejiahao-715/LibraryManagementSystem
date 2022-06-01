@@ -26,12 +26,13 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 public class JacksonSerializerConfig {
     /** 默认日期时间格式 */
-    private static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     /** 默认日期格式 */
-    private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
     /** 默认时间格式 */
-    private static final String DEFAULT_TIME_FORMAT = "HH:mm:ss";
+    public static final String DEFAULT_TIME_FORMAT = "HH:mm:ss";
 
+    // 注意下面对象的序列化和反序列的配置只对@RequestBody和@ResponseBody的对象生效，对于@RequestParam注解标记的参数是无效的
     @Bean
     public ObjectMapper objectMapper(){
         ObjectMapper objectMapper = new ObjectMapper();

@@ -25,7 +25,7 @@ public class BorrowBookDetailVo {
     /**
      * 借书用户的id
      */
-    private String userId;
+    private Long userId;
 
     /**
      * 借书用户的姓名
