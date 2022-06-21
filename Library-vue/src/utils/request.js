@@ -6,7 +6,9 @@ import {ElMessage} from "element-plus";
 import {useUserInfoStore} from "@/store/useUserInfoStore";
 
 
-const baseURL = 'http://127.0.0.1:8080/api'
+// const baseURL = 'http://127.0.0.1:8080/api'
+const baseURL = 'http://www.xiejiahao.top:10000/api'
+
 
 const service = axios.create({
   baseURL: baseURL,

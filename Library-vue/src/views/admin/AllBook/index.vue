@@ -53,7 +53,7 @@
             <el-button @click="getBookDetail(row.id)">查看图书</el-button>
             <el-button @click="updateBook(row.id)">修改图书基本信息</el-button>
             <el-button @click="openAddBookDialog(row.id)">添加图书</el-button>
-            <el-button @click="openOutBookDialog(row.id,row.stockNum)">图书出库</el-button>
+            <el-button v-if="row.stockNum > 0" @click="openOutBookDialog(row.id,row.stockNum)">图书出库</el-button>
           </div>
         </template>
       </el-table-column>
